@@ -1,16 +1,25 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// src/App.jsx
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import Navbar from "./components/Navbar";
+import Footer from "./components/Footer";
 import Home from "./pages/Home";
 import ReportForm from "./pages/ReportForm";
 import Dashboard from "./pages/Dashboard";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 
-export default function App() {
+function AppContent() {
+  const location = useLocation();
+
+  // Define the routes where the footer should be shown
+  const showFooterPaths = ["/", "/report", "/dashboard"];
+
+  const shouldShowFooter = showFooterPaths.includes(location.pathname);
+
   return (
-    <Router>
+    <div className="flex flex-col min-h-screen">
       <Navbar />
-      <div className="p-6">
+      <main className="flex-grow">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/report" element={<ReportForm />} />
@@ -18,7 +27,18 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
         </Routes>
-      </div>
+      </main>
+
+      {/* ✅ Footer only shows on specific pages */}
+      {shouldShowFooter && <Footer />}
+    </div>
+  );
+}
+
+export default function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }
